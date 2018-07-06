@@ -18,6 +18,7 @@ Get-ChildItem -Path Microsoft.PowerShell.Core\Registry::HKEY_CURRENT_USER\Softwa
     $protocol = $_.GetValue('Protocol')
     $hostname = $_.GetValue('HostName')
     $port     = $_.GetValue('PortNumber')
+    $nayme    = ([string]$_).replace('HKEY_CURRENT_USER\Software\SimonTatham\PuTTY\Sessions\', '').replace('%20', ' ')
     if ($hostname -ne "" -and $protocol -eq "ssh" -or $protocol -eq "telnet"){
         $f = $true
         # Extract defined_options from session settings
@@ -40,7 +41,7 @@ Get-ChildItem -Path Microsoft.PowerShell.Core\Registry::HKEY_CURRENT_USER\Softwa
         }
         if ($protocol -eq "ssh")
         {
-            $output = 'ssh {0} -p {1} {2}' -f $hostname, $port, $options
+            $output = 'ssh {0} -p {1} # {2}' -f $hostname, $port, $nayme
         }
         else # Telnet
         {
